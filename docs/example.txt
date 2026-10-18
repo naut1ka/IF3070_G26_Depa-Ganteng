@@ -1,0 +1,1 @@
+# Template file for folder structure creation
