@@ -1,6 +1,7 @@
 from model.entities import Vehicle, Ship, Placement, Orientation, Dimensions
-from model.neighbor import random_neighbor
+from model.neighbor import rotate
 from model.validation import is_valid
+from model.initial import initial_state
 
 if __name__ == "__main__":
     ship = Ship(Dimensions(4, 2), 500)                       
@@ -9,15 +10,5 @@ if __name__ == "__main__":
     before = dict(state)
     vehicles_by_id = {v.id: v for v in vehicles}
 
-    for _ in range(50):
-        new_state = random_neighbor(state, vehicles_by_id, ship)
-        assert state == before
 
-        jumlah_beda = sum(1 for k in state if state[k] != new_state[k])
-        assert jumlah_beda == 1
-
-        assert new_state["Falzi"] is None
-
-        assert is_valid(state, vehicles_by_id, ship)
-
-    print("rotate lolos")
+    print(initial_state(vehicles_by_id, ship))
