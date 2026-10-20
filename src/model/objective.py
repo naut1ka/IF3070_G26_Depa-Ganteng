@@ -1,7 +1,6 @@
+from .entities import State, Vehicle
 
-from .entities import Ship, Vehicle
-
-def value(state: Ship.State, vehicles: dict[str, Vehicle]) -> int:
+def value(state: State, vehicles: dict[str, Vehicle]) -> int:
     
     total_value = 0
 
