@@ -1,7 +1,7 @@
 
-from .entities import Ship, Vehicle, Placement, Orientation
+from .entities import Ship, Vehicle, Placement, Orientation, State
 
-def is_valid(state: Ship.State, vehicles: dict[str, Vehicle], ship: Ship) -> bool:
+def is_valid(state: State, vehicles: dict[str, Vehicle], ship: Ship) -> bool:
     if state.keys() != vehicles.keys():
         return False
 
