@@ -41,6 +41,7 @@ class Vehicle:
 class Ship:
     dimensions: Dimensions # # w = kolom, l = baris
     max_capacity: int
+    
 State = dict[str, Optional[Placement]]
     
         
