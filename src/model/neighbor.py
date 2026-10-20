@@ -1,4 +1,3 @@
-import random
 from dataclasses import replace
 from model.entities import Vehicle, Ship, Placement, Orientation, State, Dimensions
 
@@ -7,19 +6,12 @@ def flip(orientation: Orientation) -> Orientation:
         return Orientation.VERTICAL
     return Orientation.HORIZONTAL
 
-def random_neighbor(state: State, vehicles: list[Vehicle], ship: Ship) -> State:
-    carried = []
-    for vehicle_id, placement in state.items():
-        if placement is not None:
-            carried.append(vehicle_id)
-
-    if not carried:
-        return dict(state)
-    
-    chosen = random.choice(carried)
+def rotate(state: State, vehicle_id: str) -> State:
     new_state = dict(state)
-    old = state[chosen]
-    new_state[chosen] = replace (old, orientation = flip(old.orientation))
+    old = state[vehicle_id]
+    if old is None:
+        return dict(state)
+    new_state[vehicle_id] = replace (old, orientation = flip(old.orientation))
     return new_state
 
 # if __name__ == "__main__":
