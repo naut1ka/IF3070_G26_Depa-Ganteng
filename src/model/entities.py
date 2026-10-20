@@ -39,9 +39,10 @@ class Vehicle:
 
 @dataclass(frozen=True)
 class Ship:
-    State = dict[str, Optional[Placement]]
     dimensions: Dimensions # # w = kolom, l = baris
     max_capacity: int
+    
+State = dict[str, Optional[Placement]]
     
         
 
