@@ -3,37 +3,22 @@ from model.entities import Vehicle, Ship, Dimensions
 from algorithms.hc_random import random_restart
 from model.objective import value
 from model.validation import is_valid
-from view.grid import show_grid
+from model.initial import initial_state
+from algorithms.simulated_annealing import random_candidate, simulated_annealing, value
+import random
 
 if __name__ == "__main__":
-    ship = Ship(Dimensions(4, 2), 500)
+    random.seed(1)
+    ship = Ship(Dimensions(4, 2), 500)                       
+    vehicles = [Vehicle(id="Dheva", shipping_fee=30, weight=6, eta=4, dimensions=Dimensions(w=2, l=2)), Vehicle(id="Afif", shipping_fee=10, weight=6, eta=4, dimensions=Dimensions(w=2, l=1)), Vehicle(id="Falzi", shipping_fee=25, weight=6, eta=4, dimensions=Dimensions(w=2, l=2))]
 
-    vehicles = [
-        Vehicle("Dheva", 60, 6, 4, Dimensions(2, 2)),
-        Vehicle("Afif", 60, 6, 4, Dimensions(2, 1)),
-        Vehicle("Falzi", 60, 6, 4, Dimensions(2, 2))
-    ]
+    vehicles_by_id = {v.id: v for v in vehicles}
 
-    vehicles_by_id = {}
+    result = simulated_annealing(vehicles_by_id, ship, 100, 0.995, 50000, 1)
+    print (result.final_value, result.stuck_count, result.iterations, result.duration, result.values[0], min(result.values), max(result.values))
 
-    for vehicle in vehicles:
-        vehicles_by_id[vehicle.id] = vehicle
+    random.seed(1); a = initial_state(vehicles_by_id, ship)
+    random.seed(1); b = initial_state(vehicles_by_id, ship)
+    random.seed(2); c = initial_state(vehicles_by_id, ship)
 
-    max_restarts = 20
-    max_iterations = 100
-
-    best_state = random_restart(
-        vehicles_by_id,
-        ship,
-        max_restarts,
-        max_iterations
-    )
-
-    best_value = value(best_state, vehicles_by_id)
-
-    print("Hasil Random Restart")
-    print("Total Shipping Fee:", best_value, "juta rupiah")
-    print("Valid:", is_valid(best_state, vehicles_by_id, ship))
-    print("State:", best_state)
-
-    show_grid(best_state, vehicles_by_id, ship)
+    print(a, b, c)

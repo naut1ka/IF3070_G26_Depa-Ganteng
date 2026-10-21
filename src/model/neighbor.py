@@ -14,13 +14,18 @@ def rotate(state: State, vehicle_id: str) -> State:
     new_state[vehicle_id] = replace (old, orientation = flip(old.orientation))
     return new_state
 
-def move(state: State, vehicle_id: str, x: int, y: int) -> State:
-    # 1. salin state
+def move(state: State, vehicle_id: str, x: int, y: int, orientation = None) -> State:
+
     new_state = dict(state)
     old = state[vehicle_id]
 
     if old is None:
-        return dict(state)
+        new_state[vehicle_id] = Placement(x, y, orientation)
+
+        if new_state[vehicle_id].orientation == None:
+            return dict(state)
+        return new_state
+
     
     if old.x == x and old.y == y:
         return dict(state)
