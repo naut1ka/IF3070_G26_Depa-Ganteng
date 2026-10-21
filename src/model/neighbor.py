@@ -15,7 +15,7 @@ def rotate(state: State, vehicle_id: str) -> State:
     return new_state
 
 def move(state: State, vehicle_id: str, x: int, y: int) -> State:
-    # 1. salin state
+
     new_state = dict(state)
     old = state[vehicle_id]
 
