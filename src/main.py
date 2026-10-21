@@ -1,14 +1,39 @@
-from model.entities import Vehicle, Ship, Placement, Orientation, Dimensions
-from model.neighbor import rotate
+
+from model.entities import Vehicle, Ship, Dimensions
+from algorithms.hc_random import random_restart
+from model.objective import value
 from model.validation import is_valid
-from model.initial import initial_state
+from view.grid import show_grid
 
 if __name__ == "__main__":
-    ship = Ship(Dimensions(4, 2), 500)                       
-    vehicles = [Vehicle(id="Dheva", shipping_fee=60, weight=6, eta=4, dimensions=Dimensions(w=2, l=2)), Vehicle(id="Afif", shipping_fee=60, weight=6, eta=4, dimensions=Dimensions(w=2, l=1)), Vehicle(id="Falzi", shipping_fee=60, weight=6, eta=4, dimensions=Dimensions(w=2, l=2))]
-    state = {"Dheva": Placement(x=0, y=0, orientation=Orientation.HORIZONTAL), "Afif": Placement(x=2, y=0, orientation=Orientation.HORIZONTAL), "Falzi": None}
-    before = dict(state)
-    vehicles_by_id = {v.id: v for v in vehicles}
+    ship = Ship(Dimensions(4, 2), 500)
 
+    vehicles = [
+        Vehicle("Dheva", 60, 6, 4, Dimensions(2, 2)),
+        Vehicle("Afif", 60, 6, 4, Dimensions(2, 1)),
+        Vehicle("Falzi", 60, 6, 4, Dimensions(2, 2))
+    ]
 
-    print(initial_state(vehicles_by_id, ship))
+    vehicles_by_id = {}
+
+    for vehicle in vehicles:
+        vehicles_by_id[vehicle.id] = vehicle
+
+    max_restarts = 20
+    max_iterations = 100
+
+    best_state = random_restart(
+        vehicles_by_id,
+        ship,
+        max_restarts,
+        max_iterations
+    )
+
+    best_value = value(best_state, vehicles_by_id)
+
+    print("Hasil Random Restart")
+    print("Total Shipping Fee:", best_value, "juta rupiah")
+    print("Valid:", is_valid(best_state, vehicles_by_id, ship))
+    print("State:", best_state)
+
+    show_grid(best_state, vehicles_by_id, ship)
