@@ -2,7 +2,7 @@ import math
 import random
 import time
 from dataclasses import dataclass
-from model.entities import Vehicle, Ship, State
+from model.entities import Vehicle, Ship, Orientation, State
 from model.initial import initial_state
 from model.neighbor import rotate, move, swap
 from model.validation import is_valid
@@ -43,10 +43,16 @@ def random_candidate(state, vehicles, ship, attempts=20): #note: ini masih belum
             candidate = rotate(state, random.choice(carried))
 
         if kind == "move":
-            vehicle_id = random.choice(carried)
+            vehicle_id = random.choice(list(state))
             placement = state[vehicle_id]
+
+            if placement is None:
+                orientation = random.choice(list(Orientation))
+            else:
+                orientation = placement.orientation
+                
             vehicle = vehicles[vehicle_id]
-            cols, rows = vehicle.effective_size(placement.orientation)
+            cols, rows = vehicle.effective_size(orientation)
                             
             max_x = ship.dimensions.w - cols
             max_y = ship.dimensions.l - rows
@@ -56,7 +62,7 @@ def random_candidate(state, vehicles, ship, attempts=20): #note: ini masih belum
             x = random.randint(0, max_x)
             y = random.randint(0, max_y)
             
-            candidate = move(state, vehicle_id, x, y)
+            candidate = move(state, vehicle_id, x, y, orientation)
 
         if kind == "swap":
             a = random.choice(carried)
