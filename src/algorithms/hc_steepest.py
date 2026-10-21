@@ -6,15 +6,17 @@ from model.objective import value
 from model.entities import Placement, Orientation
 
 
-def find_best_neighbor(current_state, vehicles, ship):
+def find_neighbor(current_state, vehicles, ship, allow_sideways=False):
+    current_value = value(current_state, vehicles)
     best_state = current_state
-    best_value = value(current_state, vehicles)
+    best_value = current_value
+    sideways_state = None
 
     for v_id in vehicles:
         vehicle = vehicles[v_id]
         posisi = current_state[v_id]
 
-        if posisi == None:
+        if posisi is None:
             for orient in Orientation:
                 cols, rows = vehicle.effective_size(orient)
 
@@ -23,62 +25,84 @@ def find_best_neighbor(current_state, vehicles, ship):
                         new_state = dict(current_state)
                         new_state[v_id] = Placement(x, y, orient)
 
-                        if is_valid(new_state, vehicles, ship) == True:
+                        if is_valid(new_state, vehicles, ship):
                             new_value = value(new_state, vehicles)
 
-                            if new_value> best_value:
+                            if new_value > best_value:
                                 best_state = new_state
                                 best_value = new_value
+                            elif allow_sideways and new_value == current_value:
+                                if new_state != current_state and sideways_state is None:
+                                    sideways_state = new_state
 
         else:
             for orient in Orientation:
                 new_state = dict(current_state)
-                new_state[v_id] =Placement(posisi.x, posisi.y, orient)
+                new_state[v_id] = Placement(posisi.x, posisi.y, orient)
 
-                if is_valid(new_state, vehicles, ship) == True:
+                if is_valid(new_state, vehicles, ship):
                     new_value = value(new_state, vehicles)
 
                     if new_value > best_value:
                         best_state = new_state
                         best_value = new_value
+                    elif allow_sideways and new_value == current_value:
+                        if new_state != current_state and sideways_state is None:
+                            sideways_state = new_state
 
             for y in range(ship.dimensions.l):
                 for x in range(ship.dimensions.w):
                     new_state = move(current_state, v_id, x, y)
 
-                    if is_valid(new_state, vehicles, ship) == True:
+                    if is_valid(new_state, vehicles, ship):
                         new_value = value(new_state, vehicles)
 
                         if new_value > best_value:
                             best_state = new_state
                             best_value = new_value
+                        elif allow_sideways and new_value == current_value:
+                            if new_state != current_state and sideways_state is None:
+                                sideways_state = new_state
 
     vehicle_ids = list(vehicles.keys())
 
     for i in range(len(vehicle_ids)):
         for j in range(i + 1, len(vehicle_ids)):
-            new_state = swap(current_state, vehicle_ids[i], vehicle_ids[j])
+            new_state = swap(
+                current_state, vehicle_ids[i], vehicle_ids[j]
+            )
 
-            if is_valid(new_state, vehicles, ship) == True:
+            if is_valid(new_state, vehicles, ship):
                 new_value = value(new_state, vehicles)
 
                 if new_value > best_value:
                     best_state = new_state
                     best_value = new_value
+                elif allow_sideways and new_value == current_value:
+                    if new_state != current_state and sideways_state is None:
+                        sideways_state = new_state
 
-    return best_state, best_value
+    if best_value > current_value:
+        return best_state, best_value
+
+    if allow_sideways and sideways_state is not None:
+        return sideways_state, current_value
+
+    return current_state, current_value
 
 
-def steepest_ascent(vehicles, ship, max_iterations):
+def steepest_ascent(vehicles, ship):
     current_state = initial_state(vehicles, ship)
+    iterations = 0
 
-    for i in range(max_iterations):
-        best_state, best_value = find_best_neighbor(current_state, vehicles, ship)
+    while True:
+        best_state, best_value = find_neighbor(current_state, vehicles, ship)
         current_value = value(current_state, vehicles)
+        iterations += 1
 
         if best_value <= current_value:
             break
 
         current_state = best_state
 
-    return current_state
+    return current_state, iterations
