@@ -32,6 +32,7 @@ def sideways_move(vehicles, ship):
 
             current_state = best_state
             sideways_moves += 1
+            history.append(value(current_state, vehicles))
 
         else:
             history.append(current_value)
