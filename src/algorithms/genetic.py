@@ -13,13 +13,10 @@ class GAResult:
     final_state: State
     final_value: int
     values: list[int]
-    probabilities: list[float]
-    stuck_count: int
+    mean_values: list[float]
     iterations: int
     duration: float
     population_size: int
-    elite_size: int
-    mutation_rate: float
 
 def evaluate_fitness(state: State, vehicles: dict, ship: Ship) -> int:
     candidate = state
@@ -64,7 +61,6 @@ def sus_selection(population: list[State], fitness_list: list[int], n_parents: i
 
 def rank_selection(population: list[State], fitness_list: list[int]) -> State:
 
-    # Rank roulette
     n = len(population)
     if n == 0 or n != len(fitness_list):
         raise ValueError("populasi kosong atau panjang tidak sama dengan fitness")
@@ -146,7 +142,7 @@ def mutate_candidate(state: State, vehicles: dict, ship: Ship):
         state_b = random.choice(others)
         return swap(state, state_a, state_b)
 
-def genetic_algorithm(vehicles: dict, ship: Ship, pop_size: int, max_generations: int, p_mutation: float, seed: int, elite_size: int = 2, k: int = 3, stuck_limit: int = 50) -> GAResult:
+def genetic_algorithm(vehicles: dict, ship: Ship, pop_size: int, max_generations: int, p_mutation: float, seed: float, elite_size: int = 2, k: int = 3, stuck_limit: int = 50) -> GAResult:
 
     random.seed(seed)
     t0 = time.perf_counter()
@@ -165,8 +161,6 @@ def genetic_algorithm(vehicles: dict, ship: Ship, pop_size: int, max_generations
 
     max_values = []
     mean_values = []
-    streak = 0
-    stuck_count = 0
 
     # loop sesuai jumlah iterasi (disini akan disebut generasi, 1 iterasi = 1 generasi, biar kayak genetic banget)
     for gen in range (max_generations):
@@ -182,12 +176,6 @@ def genetic_algorithm(vehicles: dict, ship: Ship, pop_size: int, max_generations
         if current_max > best_overall_value:
             best_overall_value = current_max
             best_overall_state = population[best_idx]
-            streak = 0
-        else:
-            streak += 1
-            if streak == stuck_limit:
-                stuck_count += 1
-                streak = 0
 
         new_population = []
         sorted_population = [state for _, state in sorted(zip(fitness_list, population), key=lambda x: x[0],reverse=True)]
@@ -208,9 +196,9 @@ def genetic_algorithm(vehicles: dict, ship: Ship, pop_size: int, max_generations
             # parent_a = sus_selection(population, fitness_list)[0]
             # parent_b = sus_selection(population, fitness_list)[1]
 
-            # Rank Selection
-            parent_a = rank_selection(population, fitness_list)
-            parent_b = rank_selection(population, fitness_list)
+            # # Rank Selection
+            # parent_a = rank_selection(population, fitness_list)
+            # parent_b = rank_selection(population, fitness_list)
 
             child = crossover(parent_a, parent_b, vehicles)
             
@@ -224,11 +212,13 @@ def genetic_algorithm(vehicles: dict, ship: Ship, pop_size: int, max_generations
         population = new_population
 
     duration = time.perf_counter() - t0
-    total_fitness = sum(fitness_list)
-    probabilities = (
-        [fitness / total_fitness for fitness in fitness_list]
-        if total_fitness > 0
-        else [1 / len(fitness_list)] * len(fitness_list)
+    return GAResult(
+        initial_state=initial_best_state,
+        final_state=best_overall_state,
+        final_value=best_overall_value,
+        values=max_values,
+        mean_values=mean_values,
+        iterations=len(max_values),
+        duration=duration,
+        population_size=pop_size
     )
-
-    return GAResult(initial_state=initial_best_state, final_state=best_overall_state,final_value=best_overall_value, values=max_values, probabilities=probabilities, stuck_count=stuck_count, iterations=len(max_values), duration=duration, population_size=pop_size, elite_size=elite_size, mutation_rate=p_mutation)
