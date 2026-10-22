@@ -1,4 +1,3 @@
-
 from model.initial import initial_state
 from model.neighbor import move, swap
 from model.validation import is_valid
@@ -31,6 +30,7 @@ def find_neighbor(current_state, vehicles, ship, allow_sideways=False):
                             if new_value > best_value:
                                 best_state = new_state
                                 best_value = new_value
+
                             elif allow_sideways and new_value == current_value:
                                 if new_state != current_state and sideways_state is None:
                                     sideways_state = new_state
@@ -46,6 +46,7 @@ def find_neighbor(current_state, vehicles, ship, allow_sideways=False):
                     if new_value > best_value:
                         best_state = new_state
                         best_value = new_value
+
                     elif allow_sideways and new_value == current_value:
                         if new_state != current_state and sideways_state is None:
                             sideways_state = new_state
@@ -60,6 +61,7 @@ def find_neighbor(current_state, vehicles, ship, allow_sideways=False):
                         if new_value > best_value:
                             best_state = new_state
                             best_value = new_value
+
                         elif allow_sideways and new_value == current_value:
                             if new_state != current_state and sideways_state is None:
                                 sideways_state = new_state
@@ -78,6 +80,7 @@ def find_neighbor(current_state, vehicles, ship, allow_sideways=False):
                 if new_value > best_value:
                     best_state = new_state
                     best_value = new_value
+
                 elif allow_sideways and new_value == current_value:
                     if new_state != current_state and sideways_state is None:
                         sideways_state = new_state
@@ -93,10 +96,14 @@ def find_neighbor(current_state, vehicles, ship, allow_sideways=False):
 
 def steepest_ascent(vehicles, ship):
     current_state = initial_state(vehicles, ship)
+    start_state = dict(current_state)
     iterations = 0
 
     while True:
-        best_state, best_value = find_neighbor(current_state, vehicles, ship)
+        best_state, best_value = find_neighbor(
+            current_state, vehicles, ship
+        )
+
         current_value = value(current_state, vehicles)
         iterations += 1
 
@@ -105,4 +112,12 @@ def steepest_ascent(vehicles, ship):
 
         current_state = best_state
 
-    return current_state, iterations
+    final_state = current_state
+    final_value = value(final_state, vehicles)
+
+    return {
+        "initial_state": start_state,
+        "final_state": final_state,
+        "final_value": final_value,
+        "iterations": iterations
+    }
