@@ -142,7 +142,7 @@ def mutate_candidate(state: State, vehicles: dict, ship: Ship):
         state_b = random.choice(others)
         return swap(state, state_a, state_b)
 
-def genetic_algorithm(vehicles: dict, ship: Ship, pop_size: int, max_generations: int, p_mutation: float, seed: float, elite_size: int = 2, k: int = 3, stuck_limit: int = 50) -> GAResult:
+def genetic_algorithm(vehicles: dict, ship: Ship, pop_size: int, max_generations: int, p_mutation: float, seed: float, elite_size: int = 2, k: int = 3) -> GAResult:
 
     random.seed(seed)
     t0 = time.perf_counter()
