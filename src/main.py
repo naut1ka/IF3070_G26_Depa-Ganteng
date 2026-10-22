@@ -167,7 +167,7 @@ def main() -> None:
         elif choice == "2":
             parameters = {
                 "initial_temp": 100.0,
-                "alpha": 0.995,
+                "alpha": 0.99,
                 "max_iteration": 5000,
                 "seed": RANDOM_SEED,
                 "stuck_limit": 50,
@@ -205,7 +205,7 @@ def main() -> None:
 
         elif choice == "4":
             parameters = {"max_restarts": 10}
-            result = random_restart(vehicles, ship)
+            result = random_restart(vehicles, ship, parameters["max_restarts"])
             figure = show_hill_climbing_result(
                 result,
                 vehicles,
@@ -217,7 +217,7 @@ def main() -> None:
 
         elif choice == "5":
             parameters = {"max_sideways": 20}
-            result = sideways_move(vehicles, ship)
+            result = sideways_move(vehicles, ship, parameters["max_sideways"])
             figure = show_hill_climbing_result(
                 result,
                 vehicles,

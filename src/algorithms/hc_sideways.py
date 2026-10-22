@@ -4,9 +4,8 @@ from model.objective import value
 from algorithms.hc_steepest import find_neighbor
 
 
-def sideways_move(vehicles, ship):
+def sideways_move(vehicles, ship, max_sideways:int):
     start_time = time.perf_counter()
-    max_sideways = 20
 
     current_state = initial_state(vehicles, ship)
     start_state = dict(current_state)
