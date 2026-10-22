@@ -1,0 +1,277 @@
+{
+  "algorithm": "hill_climbing_steepest",
+  "parameters": {
+    "max_restarts": 10
+  },
+  "initial_state": {
+    "V01": null,
+    "V02": null,
+    "V03": {
+      "x": 8,
+      "y": 12,
+      "orientation": "Vertical"
+    },
+    "V04": {
+      "x": 1,
+      "y": 1,
+      "orientation": "Horizontal"
+    },
+    "V05": {
+      "x": 0,
+      "y": 0,
+      "orientation": "Vertical"
+    },
+    "V06": null,
+    "V07": {
+      "x": 1,
+      "y": 17,
+      "orientation": "Vertical"
+    },
+    "V08": null,
+    "V09": {
+      "x": 3,
+      "y": 6,
+      "orientation": "Vertical"
+    },
+    "V10": {
+      "x": 5,
+      "y": 1,
+      "orientation": "Vertical"
+    },
+    "V11": null,
+    "V12": {
+      "x": 1,
+      "y": 11,
+      "orientation": "Horizontal"
+    },
+    "V13": null,
+    "V14": null,
+    "V15": {
+      "x": 8,
+      "y": 2,
+      "orientation": "Vertical"
+    },
+    "V16": null,
+    "V17": {
+      "x": 6,
+      "y": 10,
+      "orientation": "Horizontal"
+    },
+    "V18": {
+      "x": 1,
+      "y": 3,
+      "orientation": "Horizontal"
+    },
+    "V19": {
+      "x": 0,
+      "y": 14,
+      "orientation": "Vertical"
+    },
+    "V20": {
+      "x": 1,
+      "y": 8,
+      "orientation": "Horizontal"
+    },
+    "V21": null,
+    "V22": null,
+    "V23": null,
+    "V24": null,
+    "V25": null,
+    "V26": null,
+    "V27": null,
+    "V28": null,
+    "V29": null,
+    "V30": {
+      "x": 4,
+      "y": 16,
+      "orientation": "Vertical"
+    },
+    "V31": null,
+    "V32": null,
+    "V33": null,
+    "V34": null,
+    "V35": {
+      "x": 1,
+      "y": 6,
+      "orientation": "Vertical"
+    },
+    "V36": {
+      "x": 0,
+      "y": 7,
+      "orientation": "Horizontal"
+    },
+    "V37": null,
+    "V38": null,
+    "V39": null,
+    "V40": {
+      "x": 8,
+      "y": 5,
+      "orientation": "Horizontal"
+    },
+    "V41": null,
+    "V42": null,
+    "V43": {
+      "x": 6,
+      "y": 0,
+      "orientation": "Vertical"
+    },
+    "V44": null,
+    "V45": {
+      "x": 9,
+      "y": 4,
+      "orientation": "Horizontal"
+    },
+    "V46": null,
+    "V47": {
+      "x": 2,
+      "y": 4,
+      "orientation": "Vertical"
+    },
+    "V48": null,
+    "V49": null,
+    "V50": null
+  },
+  "final_state": {
+    "V01": null,
+    "V02": null,
+    "V03": null,
+    "V04": null,
+    "V05": null,
+    "V06": {
+      "x": 0,
+      "y": 0,
+      "orientation": "Vertical"
+    },
+    "V07": {
+      "x": 1,
+      "y": 17,
+      "orientation": "Vertical"
+    },
+    "V08": null,
+    "V09": null,
+    "V10": null,
+    "V11": {
+      "x": 8,
+      "y": 2,
+      "orientation": "Vertical"
+    },
+    "V12": {
+      "x": 1,
+      "y": 11,
+      "orientation": "Horizontal"
+    },
+    "V13": null,
+    "V14": null,
+    "V15": null,
+    "V16": {
+      "x": 4,
+      "y": 16,
+      "orientation": "Vertical"
+    },
+    "V17": {
+      "x": 6,
+      "y": 10,
+      "orientation": "Horizontal"
+    },
+    "V18": {
+      "x": 1,
+      "y": 3,
+      "orientation": "Horizontal"
+    },
+    "V19": {
+      "x": 0,
+      "y": 14,
+      "orientation": "Vertical"
+    },
+    "V20": null,
+    "V21": null,
+    "V22": {
+      "x": 5,
+      "y": 1,
+      "orientation": "Vertical"
+    },
+    "V23": null,
+    "V24": null,
+    "V25": null,
+    "V26": {
+      "x": 1,
+      "y": 1,
+      "orientation": "Horizontal"
+    },
+    "V27": null,
+    "V28": null,
+    "V29": null,
+    "V30": null,
+    "V31": null,
+    "V32": null,
+    "V33": {
+      "x": 0,
+      "y": 7,
+      "orientation": "Horizontal"
+    },
+    "V34": {
+      "x": 3,
+      "y": 6,
+      "orientation": "Vertical"
+    },
+    "V35": {
+      "x": 1,
+      "y": 6,
+      "orientation": "Vertical"
+    },
+    "V36": null,
+    "V37": null,
+    "V38": null,
+    "V39": {
+      "x": 1,
+      "y": 8,
+      "orientation": "Horizontal"
+    },
+    "V40": {
+      "x": 8,
+      "y": 5,
+      "orientation": "Horizontal"
+    },
+    "V41": null,
+    "V42": null,
+    "V43": {
+      "x": 6,
+      "y": 0,
+      "orientation": "Vertical"
+    },
+    "V44": null,
+    "V45": {
+      "x": 9,
+      "y": 4,
+      "orientation": "Horizontal"
+    },
+    "V46": null,
+    "V47": {
+      "x": 2,
+      "y": 4,
+      "orientation": "Vertical"
+    },
+    "V48": null,
+    "V49": {
+      "x": 8,
+      "y": 12,
+      "orientation": "Vertical"
+    },
+    "V50": null
+  },
+  "final_objective": 1525,
+  "iterations": 10,
+  "objective_history": [
+    1132,
+    1211,
+    1277,
+    1334,
+    1385,
+    1425,
+    1460,
+    1492,
+    1509,
+    1525
+  ],
+  "duration_seconds": 3.25808309999411
+}
