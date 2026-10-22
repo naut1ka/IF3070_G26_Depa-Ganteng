@@ -12,11 +12,14 @@ class GAResult:
     initial_state: State
     final_state: State
     final_value: int
-    values: list[int]           
-    probabilities: list[float]   
+    values: list[int]
+    probabilities: list[float]
     stuck_count: int
     iterations: int
-    duration: float #dalam detik
+    duration: float
+    population_size: int
+    elite_size: int
+    mutation_rate: float
 
 def evaluate_fitness(state: State, vehicles: dict, ship: Ship) -> int:
     candidate = state
@@ -143,7 +146,7 @@ def mutate_candidate(state: State, vehicles: dict, ship: Ship):
         state_b = random.choice(others)
         return swap(state, state_a, state_b)
 
-def genetic_algorithm(vehicles: dict, ship: Ship, pop_size: int, max_generations: int, p_mutation: float, seed: int, elite_size: int = 1, k: int = 3, stuck_limit: int = 50) -> GAResult:
+def genetic_algorithm(vehicles: dict, ship: Ship, pop_size: int, max_generations: int, p_mutation: float, seed: int, elite_size: int = 2, k: int = 3, stuck_limit: int = 50) -> GAResult:
 
     random.seed(seed)
     t0 = time.perf_counter()
@@ -194,8 +197,8 @@ def genetic_algorithm(vehicles: dict, ship: Ship, pop_size: int, max_generations
 
         while len(new_population) < pop_size:
             # Tournament Selection
-            # parent_a = tournament_selection(population, fitness_list, k)
-            # parent_b = tournament_selection(population, fitness_list, k)
+            parent_a = tournament_selection(population, fitness_list, k)
+            parent_b = tournament_selection(population, fitness_list, k)
 
             # Roulette Wheel Selection
             # parent_a = roulette_wheel_selection(population, fitness_list)
@@ -228,4 +231,4 @@ def genetic_algorithm(vehicles: dict, ship: Ship, pop_size: int, max_generations
         else [1 / len(fitness_list)] * len(fitness_list)
     )
 
-    return GAResult(initial_best_state,best_overall_state, best_overall_value, max_values, probabilities, stuck_count, len(max_values), duration)
+    return GAResult(initial_state=initial_best_state, final_state=best_overall_state,final_value=best_overall_value, values=max_values, probabilities=probabilities, stuck_count=stuck_count, iterations=len(max_values), duration=duration, population_size=pop_size, elite_size=elite_size, mutation_rate=p_mutation)
