@@ -125,7 +125,9 @@ def make_algorithm_result_figure(
 
     objective_axes.set_title("Nilai Objective Function per Iterasi")
     objective_axes.set_xlabel(
-        "Urutan nilai riwayat (restart digabung)" if isinstance(result, Mapping) else "Iterasi"
+        "Iterasi / urutan nilai riwayat"
+        if isinstance(result, Mapping)
+        else "Iterasi"
     )
     objective_axes.set_ylabel("Nilai Objective Function")
     objective_axes.grid(color="#D7DCE2", linewidth=0.8, alpha=0.8)
