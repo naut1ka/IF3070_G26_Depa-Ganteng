@@ -137,12 +137,12 @@ def make_algorithm_result_figure(
             else getattr(result, "duration", None)
         )
     duration_text = (
-        f"Durasi: {duration:.4f} detik"
+        f"Duration: {duration:.4f} seconds"
         if duration is not None
-        else "Durasi: tidak tersedia"
+        else "Duration: not available"
     )
-    summary = [f"Objective akhir: {final_value}", duration_text, *stats]
+    summary = [f"Final Objective: {final_value}", duration_text, *stats]
     figure.suptitle(title, fontsize=15, fontweight="bold")
-    figure.text(0.5, 0.925, "  |  ".join(summary), ha="center", va="top", fontsize=9, wrap=True)
-    figure.tight_layout(rect=(0, 0, 1, 0.89))
+    figure.text(0.5, 0.925, "\n".join(summary), ha="center", va="top", fontsize=9)
+    figure.tight_layout(rect=(0, 0, 1, 0.82))
     return figure

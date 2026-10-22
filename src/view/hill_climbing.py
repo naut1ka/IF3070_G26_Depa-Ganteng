@@ -26,7 +26,7 @@ def show_hill_climbing_result(
             )
         )
     elif variant == "sideways":
-        stats.extend(
+        stats.append(
             (
                 "Sideways moves at termination "
                 f"(reset after an uphill move): {result['sideways_moves']}"

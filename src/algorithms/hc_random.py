@@ -2,9 +2,8 @@ import time
 from algorithms.hc_steepest import steepest_ascent
 
 
-def random_restart(vehicles, ship):
+def random_restart(vehicles, ship, max_restarts:int):
     start_time = time.perf_counter()
-    max_restarts = 10
 
     best_result = None
     best_value = -1
