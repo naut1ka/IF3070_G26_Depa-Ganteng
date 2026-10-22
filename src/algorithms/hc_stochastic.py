@@ -1,4 +1,4 @@
-
+import time
 import random
 
 from model.initial import initial_state
@@ -76,9 +76,11 @@ def find_better_neighbors(current_state, vehicles, ship):
 
 
 def stochastic_hill_climbing(vehicles, ship):
+    start_time = time.perf_counter()
     current_state= initial_state(vehicles,ship)
     start_state = dict(current_state)
     iterations = 0
+    history = [value(current_state, vehicles)]
     
     while True:
         better_neighbors = find_better_neighbors(current_state, vehicles, ship)
@@ -88,14 +90,20 @@ def stochastic_hill_climbing(vehicles, ship):
         
         current_state = random.choice(better_neighbors)
         iterations +=1 
+        
+        current_value = value(current_state, vehicles)
+        history.append(current_value)
     
     final_state = current_state 
     final_value = value(final_state, vehicles)
+    duration = time.perf_counter() - start_time
     
     return{
         "initial_state" : start_state,
         "final_state" : final_state,
         "final_value" : final_value,
-        "iterations" : iterations
+        "iterations" : iterations,
+        "history" : history,
+        "duration" : duration
     } 
 
