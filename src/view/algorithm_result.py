@@ -11,6 +11,7 @@ from model.objective import value
 
 
 OBJECTIVE_COLOR = "#4C78A8"
+PROBABILITY_COLOR = "#E45756"
 
 def get_vehicle_color(vehicle_id: str) -> str:
     rng = random.Random(vehicle_id)
@@ -52,18 +53,26 @@ def make_algorithm_result_figure(
     ship: Ship,
     stats: Sequence[str],
     duration: float | None,
-    objective_series: Sequence[tuple[str, Sequence[float], str]] | None = None
+    objective_series: Sequence[tuple[str, Sequence[float], str]] | None = None,
+    probabilities: Sequence[float] | None = None
 ) -> Figure:
     initial_state = result_value(result, "initial_state")
     final_state = result_value(result, "final_state")
     final_value = result_value(result, "final_value")
     iterations = result_value(result, "iterations")
 
-    figure = plt.figure(figsize=(12, 8))
-    layout = figure.add_gridspec(2, 2, height_ratios=(1, 0.85))
+    if probabilities is None:
+        figure = plt.figure(figsize=(12, 8))
+        layout = figure.add_gridspec(2, 2, height_ratios=(1, 0.85))
+    else:
+        figure = plt.figure(figsize=(12, 11))
+        layout = figure.add_gridspec(3, 2, height_ratios=(1, 0.85, 0.7))
     initial_axes = figure.add_subplot(layout[0, 0])
     final_axes = figure.add_subplot(layout[0, 1])
     objective_axes = figure.add_subplot(layout[1, :])
+    probability_axes = (
+        figure.add_subplot(layout[2, :]) if probabilities is not None else None
+    )
 
     draw_state(initial_axes, initial_state, vehicles, ship, "State Awal")
     draw_state(final_axes, final_state, vehicles, ship, "State Akhir")
@@ -129,6 +138,22 @@ def make_algorithm_result_figure(
     )
     objective_axes.set_ylabel("Nilai Objective Function")
     objective_axes.grid(color="#D7DCE2", linewidth=0.8, alpha=0.8)
+
+    if probability_axes is not None:
+        probability_values = list(probabilities)
+        probability_axes.plot(
+            range(1, len(probability_values) + 1),
+            probability_values,
+            color=PROBABILITY_COLOR,
+            linewidth=1.2
+        )
+        probability_axes.set_xlim(0, max(len(probability_values), 1))
+        objective_axes.set_xlim(0, max(len(probability_values), 1))
+        probability_axes.set_ylim(0, 1.05)
+        probability_axes.set_title("Probabilitas Penerimaan per Iterasi")
+        probability_axes.set_xlabel("Iterasi")
+        probability_axes.set_ylabel("Probabilitas diterima")
+        probability_axes.grid(color="#D7DCE2", linewidth=0.8, alpha=0.8)
 
     if duration is None:
         duration = (

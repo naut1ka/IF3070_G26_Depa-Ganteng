@@ -34,7 +34,8 @@ def show_simulated_annealing_result(
         vehicles,
         ship,
         stats,
-        actual_duration
+        actual_duration,
+        probabilities=result.probabilities
     )
     if show:
         plt.show()
