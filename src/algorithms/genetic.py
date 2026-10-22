@@ -24,6 +24,56 @@ def evaluate_fitness(state: State, vehicles: dict, ship: Ship) -> int:
         return value(candidate, vehicles)
     return 0
 
+def roulette_wheel_selection(population: list[State], fitness_list: list[int]) -> State:
+    total_fitness = sum(fitness_list)
+    if total_fitness == 0:
+        return population[random.randint(0, len(population) - 1)]
+
+    pick = random.uniform(0, total_fitness)
+    current = 0.0
+
+    for i in range (len(population)):
+        current = current + fitness_list[i]
+        if (current >= pick):
+            return population[i]
+
+    return population[-1]
+
+def sus_selection(population: list[State], fitness_list: list[int], n_parents: int = 2) -> list[State]:
+    total_fitness=sum(fitness_list)
+    if total_fitness == 0:
+        return [population[random.randint(0, len(population))] for _ in range(n_parents)]
+
+    distance = total_fitness/n_parents
+    start = random.uniform(0, distance)
+    pointers = [start + i * distance for i in range(n_parents)]
+
+    selected_parents = []
+    for point in pointers:
+        i = 0
+        current = fitness_list[0]
+        while current < point and i < len(population)-1:
+            i+=1
+            current+=fitness_list[i]
+        selected_parents.append(population[i])
+
+    return selected_parents
+
+def rank_selection(population: list[State], fitness_list: list[int]) -> State:
+
+    # Rank roulette
+    n = len(population)
+    if n == 0 or n != len(fitness_list):
+        raise ValueError("populasi kosong atau panjang tidak sama dengan fitness")
+    if n == 1:
+        return population[0]
+    s = 1.5 
+    order = sorted(range(n), key=lambda i: fitness_list[i])
+    weights = [0.0] * n
+    for r, i in enumerate(order): # r ini rank/position per i
+        weights[i] = (2 - s) + 2 * (s - 1) * r / (n - 1)
+    return random.choices(population, weights=weights, k=1)[0]
+
 def tournament_selection(population: list[State], fitness_list: list[int], k: int) -> State:
     candidate_index = random.sample(range(len(population)),k)
     best_index = candidate_index[0]
@@ -143,8 +193,21 @@ def genetic_algorithm(vehicles: dict, ship: Ship, pop_size: int, max_generations
             new_population.append(sorted_population[z])
 
         while len(new_population) < pop_size:
-            parent_a = tournament_selection(population, fitness_list, k)
-            parent_b = tournament_selection(population, fitness_list, k)
+            # Tournament Selection
+            # parent_a = tournament_selection(population, fitness_list, k)
+            # parent_b = tournament_selection(population, fitness_list, k)
+
+            # Roulette Wheel Selection
+            # parent_a = roulette_wheel_selection(population, fitness_list)
+            # parent_b = roulette_wheel_selection(population, fitness_list)
+
+            # SUS Selection
+            # parent_a = sus_selection(population, fitness_list)[0]
+            # parent_b = sus_selection(population, fitness_list)[1]
+
+            # Rank Selection
+            parent_a = rank_selection(population, fitness_list)
+            parent_b = rank_selection(population, fitness_list)
 
             child = crossover(parent_a, parent_b, vehicles)
             
